@@ -6,8 +6,12 @@ import json
 
 # --- SETUP & CONFIG ---
 load_dotenv()
-api_key = os.getenv("GEMINI_API_KEY")
 
+if "GEMINI_API_KEY" in st.secrets:
+    api_key = st.secrets["GEMINI_API_KEY"]
+else:
+    api_key = os.getenv("GEMINI_API_KEY")
+    
 # Direct configuration as requested
 genai.configure(api_key=api_key)
 
