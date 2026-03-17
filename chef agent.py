@@ -6,18 +6,13 @@ import json
 
 # --- SETUP & CONFIG ---
 load_dotenv()
-
-if "GEMINI_API_KEY" in st.secrets:
-    api_key = st.secrets["GEMINI_API_KEY"]
-else:
-    api_key = os.getenv("GEMINI_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
     
 # Direct configuration as requested
 genai.configure(api_key=api_key)
 
 # Challenge Image 1: Robot Avatar Requirement
 CHEF_ROBOT_IMG = "https://cdn-icons-png.flaticon.com/512/6141/6141441.png"
-
 st.set_page_config(page_title="Chef AI-Xora v2.5", page_icon="👨‍🍳")
 
 file_name = "chat_memory.json"
@@ -67,22 +62,37 @@ You are not a machine; you are Chef AI-Xora 👨‍🍳. You are a legendary, sl
 model = genai.GenerativeModel('gemini-2.5-flash-lite', system_instruction=instruction)
 
 # --- SIDEBAR (UI/UX Mandatory Elements) ---
+# --- SIDEBAR (UI/UX Transformation) ---
+# --- SIDEBAR ---
+# --- SIDEBAR ---
 with st.sidebar:
-    st.image(CHEF_ROBOT_IMG, width=120)
-    st.markdown("## Chef AI-Xora v2.5")
+    # Image ko center karne ka simple tarika
+    _, col_img, _ = st.columns([1, 2, 1])
+    with col_img:
+        st.image("robot.png", width=150)
+
+    # Text ko center aur v2.5 ko black color mein karne ke liye
+    st.markdown("""
+        <div style='text-align: center;'>
+            <h2 style='font-size: 1.5em; margin-top: 10px; color: black;'>
+                Chef AI-Xora v2.5
+            </h2>
+        </div>
+        """, unsafe_allow_html=True)
+    
     st.markdown("---")
     
-    # Mandatory Developer Credit
+    # Developer Credit  
     st.markdown("### 🛠️ Developer Credit")
-    st.markdown("**Developed & Deployed by: [Tasmeet Hussain]**") 
+    st.markdown("### Developed & Deployed by:")
+    st.success("**Tasmeet Hussain**")   
     
     st.markdown("---")
-    if st.button("🗑️ Reset Kitchen Memory", use_container_width=True):
+    if st.button("🗑️ Reset Memory", use_container_width=True):
         if os.path.exists(file_name):
             os.remove(file_name)
         st.session_state.messages = []
-        st.rerun()
-
+        st.rerun()  
 # --- MAIN INTERFACE ---
 st.title("👨‍🍳 Chef AI-Xora")
 st.markdown("---")
